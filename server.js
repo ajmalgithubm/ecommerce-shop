@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import morgon from 'morgan';
 import morgan from 'morgan';
 import connectDB from './config/db.js';
+import authRouter from './Routers/authRouter.js'
 
 // configure env
 dotenv.config();
@@ -17,6 +18,7 @@ const app = express();
 // middle wires
 app.use(express.json());
 app.use(morgan('dev'));
+app.use('/api/v1/auth', authRouter);
 
 
 // rest api 
