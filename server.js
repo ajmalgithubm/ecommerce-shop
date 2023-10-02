@@ -1,15 +1,22 @@
 import express from 'express';
 import colors from 'colors';
 import dotenv from 'dotenv';
-
+import morgon from 'morgan';
+import morgan from 'morgan';
+import connectDB from './config/db.js';
 
 // configure env
 dotenv.config();
 
+// databse config
+connectDB()
 
 // rest object
 const app = express();
 
+// middle wires
+app.use(express.json());
+app.use(morgan('dev'));
 
 
 // rest api 
@@ -24,5 +31,5 @@ const PORT = process.env.PORT;
    
 // run listen
 app.listen(PORT, () => {
-    console.log(`Server is Runnig on The ${PORT}`.bgRed.white);
+    console.log(`Server is Runnig on The ${PORT}`.bgBlue.white);
 }) 
