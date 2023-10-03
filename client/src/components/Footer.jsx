@@ -2,12 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 const Footer = () => {
   return (
-    <div className='footer' style={{
-        position:'fixed',
-        bottom:0,
-        left:0,
-        right:0
-    }}>
+    <div className='footer' >
       <h4 className='text-center'>
         All Right Reserved &copy; MY technology
       </h4>
