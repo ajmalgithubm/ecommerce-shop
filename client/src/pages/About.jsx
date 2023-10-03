@@ -3,7 +3,7 @@ import Layout from '../components/Layout/Layout'
 
 const About = () => {
   return (
-    <Layout>
+    <Layout title = "About Us">
         <div className="row about p-4">
           <div className="col-md-6">
             <img src="/images/about.png" alt="about" style={{ width:"100%"}} srcset="" />
