@@ -12,6 +12,8 @@ sans-serif;
 font-family: 'Roboto',
 sans-serif; */
 
+/* **************************** NAVBAR ******************************** */
+
 .navbar{
     font-family: "Poppins", sans-serif;
     font-size: 17px;
@@ -33,8 +35,51 @@ sans-serif; */
     letter-spacing: 1px;
 }
 
-/* ***********************************Footer**************** */
+/* *********************************** FOOOTER ********************* */
 
 .footer{
-    color
+    color:white;
+    padding: 25px;
+    background:linear-gradient(to right, rgb(83, 82, 82), black);
+}
+
+.footer a{
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+}
+.footer a:hover{
+    color: #ffefba;
+    border-bottom: 1px solid #ffefba;
+}
+
+/* **************************  PAGE NOT FOUND ********************************** */
+.pnf{
+    display: flex;
+    min-height: 65vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.pnf-title{
+    font-size: 100px;
+    font-weight: 700;
+}
+.pnf-heading{
+    font-weight: normal;
+}
+
+.pnf-btn{
+    color: black;
+    border: 1px solid black;
+    text-decoration: none;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* ********************** CONTACT ********************** */
+
+.contacts{
+    padding: 20px;
+    margin-bottom: 180px;
 }
