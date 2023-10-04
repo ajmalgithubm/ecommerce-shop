@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import axios from 'axios'
 import {toast} from 'react-toastify'
-import {  useNavigate } from 'react-router-dom'
+import {  useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 
 const Login = () => {
@@ -14,6 +14,7 @@ const Login = () => {
     })
     const {email, password} = loginData;
     const [auth, setAuth] = useAuth();
+    const location = useLocation();
 
     const onHandleSubmit = async(e) => {
         e.preventDefault();
@@ -32,7 +33,7 @@ const Login = () => {
                     token
                 })
                 localStorage.setItem("auth", JSON.stringify({ user, token}));
-                navigate("/")
+                navigate( location.state ||"/")
             }
 
         }catch(err){

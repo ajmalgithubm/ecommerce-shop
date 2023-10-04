@@ -24,8 +24,8 @@ app.use(cors())
 
 app.use('/api/v1/auth', authRouter);
 
-
-
+ 
+  
 // rest api 
 app.get("/api", (req, res) => {
     res.send("<h1>Welcome</h1>")
