@@ -4,9 +4,10 @@ import JWT from 'jsonwebtoken';
 
 // REGISTER | POST
 export const registerController = async (req, res) => {
+    console.log("request is recieved",req.body);
     try {
         const { name, email, password, phone, address } = req.body;
-
+        
         // validation
         if (!name) {
             return res.send({ message: "Name is Required" });
@@ -30,7 +31,7 @@ export const registerController = async (req, res) => {
         // existing the user
         if(existingUser){
             return res.status(200).send({
-                success : true,
+                success : false,
                 message : "Already Registered Please Login"
             })
         }
@@ -59,6 +60,7 @@ export const registerController = async (req, res) => {
 
 // LOGIN | POST
 export const loginController = async (req, res) => {
+    console.log("Login POST API CALLED ****");
     try {
         const {email, password} = req.body;
 
@@ -73,14 +75,14 @@ export const loginController = async (req, res) => {
         // check user
         const user = await userModel.findOne({email});
         if(!user){
-            return res.status(404).send({
+            return res.status(200).send({
                 success:false,
                 message:"Email doesnot exist"
             })
         }
         const match = await comparePassword(password, user.password);
         if(!match){
-            return res.status(200).send({
+            return res.status(404).send({
                 success: false,
                 message: "Invalid Password"
             })
