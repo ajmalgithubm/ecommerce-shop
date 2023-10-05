@@ -1,0 +1,14 @@
+import express from 'express';
+import { isAdmin, requireSignIn } from '../Middleware/authMiddleware.js'
+import { createCategoryController, updateCategoryController } from '../Controllers/categoryController.js';
+const router = express.Router();
+
+// create category
+
+router.post("/create-category", requireSignIn, isAdmin, createCategoryController); 
+
+// update category
+
+router.put("/update-category/:id", requireSignIn, isAdmin, updateCategoryController );
+
+export default router

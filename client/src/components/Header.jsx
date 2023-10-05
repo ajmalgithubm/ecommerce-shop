@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { AiFillShopping } from "react-icons/ai";
 import { useAuth } from '../context/auth';
 import { useNavigate } from 'react-router-dom';
+import Dashboard from './../pages/user/Dashboard';
 
 const Header = () => {
 
@@ -34,31 +35,27 @@ const Header = () => {
                         <li className="nav-item">
                             <NavLink to='/category' className="nav-link">Category</NavLink>
                         </li>
-                        {
-                            !auth.user ? (
-                                <>
-                                    <li className="nav-item">
-                                        <NavLink to='/register' className="nav-link">Register</NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to='/login' className="nav-link">Login</NavLink>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li className="nav-item">
-                                        <NavLink to='/login' onClick={onLogOut} className="nav-link">Logout</NavLink>
-                                    </li>
-                                </>
-                            )
-                        }
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                User
+                               {
+                                auth?.user?.name || "USER"
+                               }
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="#">Profile</a>
-                                <a class="dropdown-item" href="#">Orders</a>
+                                {
+                                    !auth.user ? (
+                                        <>
+                                            <NavLink to='/register' className="nav-link">Register</NavLink>
+                                            <NavLink to='/login' className="nav-link">Login</NavLink>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <NavLink to={`/dashboard/${auth.user.role === 1 ? "admin" : "user"}`} className="nav-link">Dashboard</NavLink>
+                                            <NavLink to='/login' onClick={onLogOut} className="nav-link">Logout</NavLink>
+                                        </>
+                                    )
+                                }
                             </div>
                         </li>
                         <li className="nav-item">

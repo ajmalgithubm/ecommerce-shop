@@ -3,17 +3,16 @@ import userModel from '../Models/userModel.js';
 
 // protected Routes token base
 export const requireSignIn = async (req, res, next) => {
-    
-    const {token} = req.body;
+    const token = req.header('Authorization');
+    console.log("Sign Request is received ,  Token : ", token)
     try{
-        const decode = JWT.verify(token, process.env.JWT_SECRET_KEY);
+        const decode = JWT.verify( token, process.env.JWT_SECRET_KEY);
         req.user = decode
         if(decode){
             next();
         }
     }catch(err){  
         console.log(err)
-
     }
 }
 
@@ -31,7 +30,7 @@ export const isAdmin = async(req, res, next) => {
         }
     }catch(err){
         console.log("error is ", err);
-        res.status(401).send({
+        res.status(500).send({
             success:false,
             err,
             message:"error in admin middlewire"

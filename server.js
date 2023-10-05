@@ -5,25 +5,26 @@ import morgon from 'morgan';
 import morgan from 'morgan';
 import connectDB from './config/db.js';
 import authRouter from './Routers/authRouter.js'
+import categoryRouter from './Routers/categoryRouter.js'
 import cors from 'cors'
 
 // configure env
 dotenv.config();
 
 // databse config
-connectDB()
+connectDB() 
 
 // rest object
 const app = express();
 
 // middle wires
-app.use(express.json());
+app.use(express.json()); 
 app.use(express.urlencoded())
 app.use(morgan('dev'));
 app.use(cors())
 
 app.use('/api/v1/auth', authRouter);
-
+app.use('/api/v1/category', categoryRouter);
  
   
 // rest api 

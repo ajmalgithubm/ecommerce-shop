@@ -14,11 +14,19 @@ const AuthProvider = ({ children }) => {
             const parseData = JSON.parse(authData);
             setAuth({
                 ...auth,
-                user: parseData.user,
+                user: parseData.user, 
                 token: parseData.token
             })
         }
     }, [])
+
+    useEffect(() => {
+        axios.defaults.headers.common['Authorization'] = auth.token
+            ? `${auth.token}`
+            : "";
+    }, [auth.token]);
+
+
     return (
         <AuthContext.Provider value={[auth, setAuth]}>
             {children}
