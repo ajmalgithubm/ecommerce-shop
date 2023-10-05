@@ -13,8 +13,8 @@ const Header = () => {
         localStorage.removeItem("auth");
         setAuth({
             ...auth,
-            user:null,
-            token : ""
+            user: null,
+            token: ""
         })
         navigate('/login')
     }
@@ -27,7 +27,7 @@ const Header = () => {
                     <span className="navbar-toggler-icon" />
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ms-auto">
+                    <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
                             <NavLink to='/' className="nav-link">Home</NavLink>
                         </li>
@@ -36,22 +36,31 @@ const Header = () => {
                         </li>
                         {
                             !auth.user ? (
-                            <>
-                                <li className="nav-item">
-                                    <NavLink to='/register' className="nav-link">Register</NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink to='/login' className="nav-link">Login</NavLink>
-                                </li>
-                            </>
+                                <>
+                                    <li className="nav-item">
+                                        <NavLink to='/register' className="nav-link">Register</NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink to='/login' className="nav-link">Login</NavLink>
+                                    </li>
+                                </>
                             ) : (
-                                    <>
-                                        <li className="nav-item">
-                                            <NavLink  to='/login' onClick={onLogOut} className="nav-link">Logout</NavLink>
-                                        </li>
-                                    </>
-                                )
+                                <>
+                                    <li className="nav-item">
+                                        <NavLink to='/login' onClick={onLogOut} className="nav-link">Logout</NavLink>
+                                    </li>
+                                </>
+                            )
                         }
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                User
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="#">Orders</a>
+                            </div>
+                        </li>
                         <li className="nav-item">
                             <NavLink to='/cart' className="nav-link">Cart {0}</NavLink>
                         </li>
