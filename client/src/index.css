@@ -81,7 +81,14 @@ sans-serif; */
 
 .contacts{
     padding: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     
+}
+
+/* ********************** ABOUT ********************* */
+
+.about{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 /* ****************** REGISTER ********************** */
@@ -97,4 +104,14 @@ sans-serif; */
 
 .register form .form-group input{
     border: 1px solid rgb(165, 160, 160);
+}
+
+
+/* ************************* FORGOT PASSWORD ********************* */
+
+.forgot-password form .form-group input{
+    border: 1px solid gray;
+}
+.forgot-password{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
