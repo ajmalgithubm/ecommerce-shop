@@ -19,8 +19,8 @@ connectDB()
 const app = express();
 
 // middle wires
-app.use(express.json()); 
-app.use(express.urlencoded())
+app.use(express.json());  
+app.use(express.urlencoded()); 
 app.use(morgan('dev'));
 app.use(cors())
 

@@ -65,7 +65,7 @@ export const getCategoryController = async(req, res) => {
             category
         })
     }catch(err){
-        console.log("error is ", error.message)
+        console.log("error is ", err.message) ;
         res.status(500).send({
             success: false,
             message : "Error While get All category",
@@ -106,7 +106,7 @@ export const deleteCategoryController = async(req, res) => {
             category
         })
     }catch(err){
-        console.log("error is ", err.message);
+        console.log("error is ", err.message); 
         res.status(500).send({
             success:false,
             message: "Error While deleting the category",
