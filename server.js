@@ -30,10 +30,10 @@ app.use('/api/v1/product', productRouter)
  
   
 // rest api 
-app.get("/api", (req, res) => {
+app.get("/api", (req, res) => { 
     res.send("<h1>Welcome</h1>")
-})
-
+}) 
+ 
 
 // PORT
 

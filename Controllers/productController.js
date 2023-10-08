@@ -4,8 +4,10 @@ import fs from 'fs';
 
 
 // create product
-export const createProductController =async (req, res) => {
+export const createProductController =async (req, res) => { 
+
     try{
+        console.log(req.fields)
         const { name, description, price, category, quantity , shipping} = req.fields;
         const {photo} = req.files;
         // validation
@@ -130,6 +132,7 @@ export const updateProductController = async(req, res) => {
     try{
         const {name, description, price, category, quantity, shipping} = req.fields;
         const {photo} = req.files;
+        console.log(photo)
         switch (true) {
             case !name:
                 return res.status(500).send({message: "name is required"})
@@ -141,8 +144,6 @@ export const updateProductController = async(req, res) => {
                 return res.status(500).send({ message: "category is Required"})
             case !quantity:
                 return res.status(500).send({ message: "Quantity is Required"})
-            case !photo && photo.size > 1000000:
-                return res.status(500).send({ message: "photo is Required and Size should be less than 1 MB"})
         }
 
         const product = await productModel.findByIdAndUpdate(req.params.pid, 
@@ -152,7 +153,7 @@ export const updateProductController = async(req, res) => {
             product.photo.contentType = photo.type;
         }
         await product.save()
-        res.status(500).send({
+        res.status(200).send({
             success: true,
             message: "product updated successfully",
             product
@@ -160,10 +161,10 @@ export const updateProductController = async(req, res) => {
 
     }catch(err){
         console.log("error is ", err.message);
-        res.status(500).send({
+        res.status(500).send({ 
             message: "Error While updating Product",
             success:false,
-            err
+            err 
         })
     }
 }

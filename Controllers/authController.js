@@ -58,7 +58,7 @@ export const registerController = async (req, res) => {
             message: "Error in Registration",
             error
         })
-    }
+    } 
 };
 
 // LOGIN | POST
@@ -133,7 +133,7 @@ export const forgotPasswordController = async (req, res) => {
         } if (!newPassword) {
             return res.status(400).send("new password is Required")
         }
-        // check the email and the answer
+        // check the email and the answer 
         const  user = await userModel.findOne({email, answer});
         // validation
         if(!user){

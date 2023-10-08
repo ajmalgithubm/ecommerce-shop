@@ -136,3 +136,20 @@ sans-serif; */
 font-size: 18px;
    font-weight: 600;
 }
+
+/* *******************PRODUCT FORM */
+
+.product-form .form-group input{
+    font-size: 14px;
+}
+
+/* ***************   PRODUCT CARD *****************/
+
+.product-link{
+    text-decoration: none;
+    color: black;
+}
+.product-link:hover{
+    text-decoration: none;
+    color: black;
+}
