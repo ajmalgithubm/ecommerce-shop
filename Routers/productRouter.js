@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAdmin, requireSignIn } from '../Middleware/authMiddleware.js';
-import { createProductController, deleteProductController, getProductController, getProductPhotoController, getSingleProductController, updateProductController } from '../Controllers/productController.js';
+import { createProductController, deleteProductController, filterProductController, getProductController, getProductListController, getProductPhotoController, getSingleProductController, getTotalProductController, updateProductController } from '../Controllers/productController.js';
 import formidable from 'express-formidable';
 
 const router = express.Router();
@@ -26,7 +26,19 @@ router.get("/product-photo/:pid", getProductPhotoController);
 router.delete('/delete-product/:pid',requireSignIn, isAdmin, deleteProductController);
 
 // update product
-
+ 
 router.put('/update-product/:pid', requireSignIn, isAdmin, formidable(),  updateProductController);
+
+//  get filtered products
+
+router.post('/filter-product', filterProductController)
+
+// get the total number of product
+
+router.get('/total', getTotalProductController);
+
+// get product list as per page
+
+router.get('/product-list/:page', getProductListController)
 
 export default router;

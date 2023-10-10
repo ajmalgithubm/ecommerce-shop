@@ -28,8 +28,9 @@ const Products = () => {
 
     // life cycle method
     useEffect(() => {
-        getAllProducts()
+        getAllProducts();
     }, [])
+
     return (
         <Layout title={"Products - Ecommerce"}>
             <div className="container-fluid p-3">
@@ -49,6 +50,7 @@ const Products = () => {
                                                 <img className="card-img-top img img-fluid" src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} style={{ width: "100px" }} alt="Card image cap" />
                                                 <div className="card-body">
                                                     <h5 className="card-title">{p.name}</h5>
+                                                    <h6 className='card-title'>$ {p.price}</h6>
                                                     <p className="card-text">{p.description}</p>
                                                 </div>
                                             </div>

@@ -74,6 +74,7 @@ export const getProductController = async(req, res)=> {
 export const getSingleProductController = async (req, res) => {
     try{
         const product = await productModel.findOne({slug : req.params.slug }).select("-photo").populate("category");
+        console.log("product Object ",product)
         res.status(200).send({
             success: true,
             message: "successfuly get the product",
@@ -166,5 +167,77 @@ export const updateProductController = async(req, res) => {
             success:false,
             err 
         })
+    }
+}
+
+// filter product controller (POST)
+
+export const filterProductController = async(req, res)  => {
+    try{
+        const {checked, radio} = req.body;
+        let arg = {};
+        if(checked.length){
+            arg.category = [...checked]
+        }
+        if(radio.length){
+            arg.price = {
+                $gte:radio[0],
+                $lte:radio[1]
+            }
+        }
+        const product = await productModel.find(arg).select("-photo");
+        res.status(200).send({
+            success: true,
+            message: "Successfully filtered product",
+            product
+        })
+    }catch(err){
+        console.log("error is", err.message);
+        res.status(400).send({
+            success: false,
+            message:'Error while filtering product',
+            err
+        })
+    }
+}
+
+// get product list as per page
+export const getProductListController = async(req, res) => {
+    try {
+        const page = req.params.page ? req.params.page : 1;
+        const numberPerPage = 4;
+        const product = await productModel.find({}).select("-photo").skip(numberPerPage*(page-1)).limit(numberPerPage);
+        res.status(200).send({
+            success:true,
+            product,
+            message:"successfully completed"
+        })
+    } catch (err) {
+        console.log(err.message);
+        res.status(400).send({
+            success:false,
+            message:"Error while Fetching product List",
+            err
+        })
+    }
+}
+
+// get Total number of product
+
+export const getTotalProductController = async(req, res) =>{
+    try{
+        const total = await productModel.find({}).estimatedDocumentCount();
+        res.status(200).send({
+            success: true,
+            message:"successfully get the total number of product",
+            total
+        })
+    }catch(err){
+        console.log("error is ", err.message);
+        res.status(500).send({
+            success:false,
+            message:"error while get number of product",
+            err 
+        }) 
     }
 }

@@ -10,6 +10,7 @@ const UpdateProduct = () => {
 
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [name, setName] = useState(null)
     const [photo, setPhoto] = useState(null)
     const [description, setDescription] = useState(null)
@@ -90,17 +91,25 @@ const UpdateProduct = () => {
 
     // delete product
     const deleteProduct = async (e) => {
+        const q = window.prompt("are you sure");
+        if(!q){
+            return
+        }
+        setDeleteLoading(true)
         e.preventDefault()
         try {
             const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`);
             const { success, message } = data;
             if (success) {
+                setDeleteLoading(false)
                 toast.success("deleted")
                 navigate('/dashboard/admin/products')
             } else {
+                setDeleteLoading(false)
                 toast.error(`${message}`)
             }
         } catch (err) {
+            setDeleteLoading(false)
             console.log(err.message)
             toast.error(`error is ${err.message}`)
         }
@@ -164,7 +173,7 @@ const UpdateProduct = () => {
                                 <div className="form-group">
                                     <input
                                         type="number"
-                                        onChange={(e) => setPrice(e.target.price)}
+                                        onChange={(e) => setPrice(e.target.value)}
                                         className="form-control"
                                         value={price}
                                         name='price'
@@ -236,7 +245,13 @@ const UpdateProduct = () => {
                                     className="btn btn-danger m-1"
                                     onClick={deleteProduct}
                                 >
-                                    DELETE
+                                   {
+                                    !deleteLoading?("DELETE") : (
+                                            <>
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            </>
+                                    )
+                                   }
                                 </button>
                             </form>
                         </div>
