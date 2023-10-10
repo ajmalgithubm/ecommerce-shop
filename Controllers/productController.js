@@ -241,3 +241,48 @@ export const getTotalProductController = async(req, res) =>{
         }) 
     }
 }
+
+// Search product in Database
+export const searchProductController = async(req, res) => {
+    try {
+        const {keyword} = req.params;
+        const products = await productModel.find({}).select("-photo").populate("category").or([
+            { name : { $regex : keyword, $options: 'i'}},
+            { description : {$regex : keyword, $options:'i'}},
+            { 'category.name' : { $regex : keyword, $options : 'i'}}
+        ])
+        res.status(200).send({
+            success: true, 
+            message: "Search Product is Recieved",
+            products,
+            keyword 
+        })
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success: false,
+            message: "Error while seraching product",
+            error
+        })
+    }
+}
+// get Similar Product List
+export const similarProductController = async(req, res) => {
+    try{
+        const {cId, pId} = req.body;
+        const products = await productModel.find({ category: cId, _id : { $ne : pId} }).select("-photo").populate("category");
+        res.status(200).send({
+            success: true,
+            message: "get similar prouduct successfully",
+            products
+        })
+    }catch(err){
+        console.log(err.message)
+        res.status(400).send({
+            success:false,
+            message: "error while get similar products",
+            err
+        })
+    }
+}

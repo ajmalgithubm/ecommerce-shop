@@ -4,6 +4,8 @@ import { useAuth } from '../context/auth'
 import { Checkbox, Radio } from 'antd'
 import axios from 'axios'
 import { price } from '../components/Routes/Price'
+import { useSearch } from '../context/Search'
+import { useNavigate } from 'react-router-dom'
 
 
 const Home = () => {
@@ -17,6 +19,8 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [showLoad, setShowLoad] = useState(true)
+  const [search, setSearch] = useSearch()
+  const navigate = useNavigate()
 
   // get the products 
   const getProduct = async () => {
@@ -133,6 +137,7 @@ const Home = () => {
           <div className="col-md-3 " >
             <div className='row p-2'>
               <h3 className='text-center'>Filter By Category</h3>
+   
               <div className='d-flex flex-column'>
                 {
                   categories?.map(c => (
@@ -164,7 +169,7 @@ const Home = () => {
           </div>
           <div className="col-md-9">
             <div className='d-flex flex-wrap'>
-              {products.length === 0 && <h3>No Product Found</h3>}
+              {!products.length  && <h3>No Product Found</h3>}
               {
                 products?.map(p => (
                   <div className="card" key={p._id}>
@@ -176,7 +181,9 @@ const Home = () => {
                     </div>
                     <div className="card-footer">
                       <div className="btn-group">
-                        <button className="btn btn-success mr-1">More Details</button>
+                        <button className="btn btn-success mr-1" onClick={() => {
+                         navigate(`/more-details/${p.slug}`)
+                        }}>More Details</button>
                         <button className="btn btn-primary">Add to Cart</button>
                       </div>
                     </div>

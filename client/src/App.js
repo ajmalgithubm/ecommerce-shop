@@ -18,6 +18,8 @@ import Profile from './pages/user/Profile';
 import Orders from './pages/user/Orders';
 import Products from './pages/admin/Products';
 import UpdateProduct from './pages/admin/UpdateProduct';
+import Search from './pages/Search'
+import MoreDetails from './pages/MoreDetails';
 function App() {
   return (
     <>
@@ -26,6 +28,8 @@ function App() {
         <Route path='/policy' element={<Policy/>}/>
         <Route path='/about' element={<About />} />
         <Route path='*' element={<NotFound/>}/>
+        <Route path='/search/:keyword' element={<Search/>}/>
+        <Route path='/more-details/:slug' element={<MoreDetails/>} />
         <Route path='/dashboard' element={<PrivateRoute/>}>
           <Route path='user'  element={<Dashboard/>}/>
           <Route path='user/orders' element={<Orders/>}/>

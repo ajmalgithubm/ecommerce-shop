@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/auth';
+import { SearchProvider } from './context/Search';
 
 
 
@@ -13,7 +14,9 @@ root.render(
     <BrowserRouter>
     <React.StrictMode>
       <AuthProvider>
-          <App />
+        <SearchProvider>
+          <App/>
+        </SearchProvider>
       </AuthProvider>
     </React.StrictMode>
     </BrowserRouter>
