@@ -5,12 +5,16 @@ import { useAuth } from '../context/auth';
 import { useNavigate } from 'react-router-dom';
 import Dashboard from './../pages/user/Dashboard';
 import { useSearch } from '../context/Search'
+import { useCategory } from '../hook/category';
+import { useCart } from '../context/Cart';
 
 const Header = () => {
 
     const [auth, setAuth] = useAuth();
     const navigate = useNavigate();
     const [value, setValue] = useSearch();
+    const categories = useCategory()
+    const [cart ] = useCart()
 
     const onLogOut = () => {
         localStorage.removeItem("auth");
@@ -46,16 +50,27 @@ const Header = () => {
                                     e.preventDefault()
                                     navigate(`/search/${value?.keyword}`)
                                 }}
-                                >
-                                    Search
-                                </button>
+                            >
+                                Search
+                            </button>
                         </form>
 
                         <li className="nav-item">
                             <NavLink to='/' className="nav-link">Home</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink to='/category' className="nav-link">Category</NavLink>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Categories
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <NavLink to={`/categories`} className="nav-link">All categories</NavLink>
+                                {
+                                    categories?.map(c => (
+                                        <NavLink to={`/category/${c.slug}`} className="nav-link">{c.name}</NavLink>
+                                    ))
+                                }
+                            </div>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -80,8 +95,10 @@ const Header = () => {
                                 }
                             </div>
                         </li>
+
+
                         <li className="nav-item">
-                            <NavLink to='/cart' className="nav-link">Cart {0}</NavLink>
+                            <NavLink to='/cart' className="nav-link">Cart {cart?.length > 0 && <span class="badge badge-dark">{cart?.length}</span>}</NavLink>
                         </li>
                     </ul>
                 </div>

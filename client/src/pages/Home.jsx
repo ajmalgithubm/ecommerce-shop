@@ -6,6 +6,8 @@ import axios from 'axios'
 import { price } from '../components/Routes/Price'
 import { useSearch } from '../context/Search'
 import { useNavigate } from 'react-router-dom'
+import { CartProvider, useCart } from '../context/Cart'
+import toast from 'react-hot-toast'
 
 
 const Home = () => {
@@ -19,7 +21,8 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [showLoad, setShowLoad] = useState(true)
-  const [search, setSearch] = useSearch()
+  const [search, setSearch] = useSearch();
+  const [cart, setCart] = useCart()
   const navigate = useNavigate()
 
   // get the products 
@@ -56,42 +59,42 @@ const Home = () => {
     } catch (err) {
       console.log("error is ", err.message)
     }
-   
+
   }
-  
+
 
   // get filtered Product List
 
-  const filterProduct = async() => {
+  const filterProduct = async () => {
     setShowLoad(false)
-    try{
-      const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/filter-product`, {checked, radio})
+    try {
+      const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/filter-product`, { checked, radio })
       setProducts(data?.product)
       console.log(data);
-    }catch(err){
+    } catch (err) {
       console.log(err.message)
     }
   }
 
   // get total number of product
 
-  const totalProduct = async()  => {
-    try{
-      const {data} = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/total`);
+  const totalProduct = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/total`);
       console.log(data)
       setTotal(data?.total)
-    }catch(err){
+    } catch (err) {
       console.log(err.message)
     }
   }
 
   // get Product List as Per Page
-  const productList = async(req, res) => {
-    try{
+  const productList = async (req, res) => {
+    try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/product-list/${page}`)
       console.log(data)
       setProducts(data?.product)
-    }catch(err){
+    } catch (err) {
       console.log("error is ", err.message)
     }
   }
@@ -99,13 +102,13 @@ const Home = () => {
 
   // load more
 
-  const loadMore = async() => {
+  const loadMore = async () => {
     setIsLoading(true)
-    try{
+    try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/product-list/${page}`)
       setIsLoading(false)
       setProducts([...products, ...data.product])
-    }catch(err){
+    } catch (err) {
       console.log("error is ", err.message)
       setIsLoading(false)
     }
@@ -124,7 +127,7 @@ const Home = () => {
   }, [page])
 
   useEffect(() => {
-    if(checked.length !== 0 || radio.length!==0){
+    if (checked.length !== 0 || radio.length !== 0) {
       filterProduct()
     }
   }, [checked, radio])
@@ -137,7 +140,7 @@ const Home = () => {
           <div className="col-md-3 " >
             <div className='row p-2'>
               <h3 className='text-center'>Filter By Category</h3>
-   
+
               <div className='d-flex flex-column'>
                 {
                   categories?.map(c => (
@@ -169,7 +172,7 @@ const Home = () => {
           </div>
           <div className="col-md-9">
             <div className='d-flex flex-wrap'>
-              {!products.length  && <h3>No Product Found</h3>}
+              {!products.length && <h3>No Product Found</h3>}
               {
                 products?.map(p => (
                   <div className="card" key={p._id}>
@@ -182,9 +185,13 @@ const Home = () => {
                     <div className="card-footer">
                       <div className="btn-group">
                         <button className="btn btn-success mr-1" onClick={() => {
-                         navigate(`/more-details/${p.slug}`)
+                          navigate(`/more-details/${p.slug}`)
                         }}>More Details</button>
-                        <button className="btn btn-primary">Add to Cart</button>
+                        <button className="btn btn-primary" onClick={() => {
+                          setCart([ ...cart, p])
+                          localStorage.setItem('cart', JSON.stringify([...cart, p]))
+                          toast.success("product added to cart")
+                        }}>Add to Cart</button>
                       </div>
                     </div>
                   </div>
@@ -193,17 +200,17 @@ const Home = () => {
                 ))
 
               }
-             
+
             </div>
             <div className="row p-4">
               {
                 products.length && showLoad && products.length < total && (
                   <button className="btn btn-warning ml-3" onClick={() => {
-                    setPage(page+1);
+                    setPage(page + 1);
                   }}>
-                   {
-                    !isLoading? "LOAD MORE" : "LOADING"
-                   }
+                    {
+                      !isLoading ? "LOAD MORE" : "LOADING"
+                    }
                   </button>
                 )
               }

@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/auth';
 import { SearchProvider } from './context/Search';
+import { CartProvider } from './context/Cart';
 
 
 
@@ -15,7 +16,9 @@ root.render(
     <React.StrictMode>
       <AuthProvider>
         <SearchProvider>
-          <App/>
+          <CartProvider>
+            <App />
+          </CartProvider>
         </SearchProvider>
       </AuthProvider>
     </React.StrictMode>

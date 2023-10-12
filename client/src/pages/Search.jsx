@@ -3,12 +3,15 @@ import Layout from '../components/Layout/Layout'
 import { useSearch } from '../context/Search'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useCart } from '../context/Cart';
+import toast from 'react-hot-toast';
 
 const Search = () => {
 
     const [search, setSearch] = useSearch();
     const params = useParams()
     const navigate = useNavigate();
+    const [ cart, setCart] = useCart()
 
     // get the product based on the search keyword
     const getProducts = async () => {
@@ -48,7 +51,11 @@ const Search = () => {
                                                 <button className="btn btn-success mr-1" onClick={() => {
                                                     navigate(`/more-details/${p.slug}`)
                                                 }}>More Details</button>
-                                                <button className="btn btn-primary">Add to Cart</button>
+                                                <button className="btn btn-primary" onClick={() => {
+                                                    setCart([ ...cart, p])
+                                                    localStorage.setItem('cart', [ ...cart, p])
+                                                    toast.success("product added to cart")
+                                                }}>Add to Cart</button>
                                             </div>
                                         </div>
                                     </div>

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { useCart } from '../context/Cart'
+import toast from 'react-hot-toast'
 
 const MoreDetails = () => {
     const params = useParams()
     const [product, setProduct] = useState([]);
     const [similar, setSimilar] = useState([]);
+    const [cart, setCart] = useCart()
     const navigate = useNavigate();
 
     // get product item
@@ -48,7 +51,11 @@ const MoreDetails = () => {
                         <h3>Price : $ {product?.price}</h3>
                         <h3>Category : {product?.category?.name}</h3>
                         <h3>Shipping : {product?.shipping ?  "YES" : "NO"}</h3>
-                        <button className="btn btn-primary">Add to Cart</button>
+                        <button className="btn btn-primary" onClick={() => {
+                            setCart([...cart, product])
+                            localStorage.setItem('cart', JSON.stringify([...cart, product]))
+                            toast.success("product added to cart")
+                        }}>Add to Cart</button>
                     </div>
                 </div>
                 <div className='row p-3'>
@@ -68,7 +75,10 @@ const MoreDetails = () => {
                                                 <button className="btn btn-success mr-1" onClick={() => {
                                                     navigate(`/more-details/${p.slug}`)
                                                 }}>More Details</button>
-                                                <button className="btn btn-primary">Add to Cart</button>
+                                                <button className="btn btn-primary" onClick={() => {
+                                                    setCart([...cart, p])
+                                                    localStorage.setItem('cart', JSON.stringify([...cart, p]))
+                                                }}>Add to Cart</button>
                                             </div>
                                         </div>
                                     </div>
