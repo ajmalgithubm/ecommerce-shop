@@ -44,3 +44,19 @@ To get the project up and running on your local machine, follow these steps:
    ```bash
    git clone https://github.com/yourusername/ecommerce-razorpay.git
    cd ecommerce-razorpay
+
+# Install client dependencies
+cd client
+npm install
+
+# Install server dependencies
+cd ../server
+npm install
+# Start the client
+cd client
+npm start
+
+# Start the server
+cd ../server
+npm start
+
