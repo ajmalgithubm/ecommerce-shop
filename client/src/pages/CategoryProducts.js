@@ -41,22 +41,27 @@ const CategoryProducts = () => {
                         {
                             products?.map(p => (
                                 <div className="card" key={p._id}>
-                                    <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p?._id}`} width={200} height={200} className="card-img-top" alt="Product Image" />
+                                    <div className="image-container">
+                                        <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                                            width={200} height={200}
+                                            className="card-img-top" alt="Product Image" />
+                                    </div>
                                     <div className="card-body">
                                         <h5 className="card-title">{p?.name}</h5>
                                         <p className="card-text">{p?.description.substring(0, 30)}</p>
-                                        <p className="card-price">$ {p?.price}</p>
+                                        <p className="card-price" style={{ fontSize: '22px', color: 'green', fontWeight: '600' }}>$ {p?.price}</p>
                                     </div>
                                     <div className="card-footer">
                                         <div className="btn-group">
                                             <button className="btn btn-success mr-1" onClick={() => {
                                                 navigate(`/more-details/${p?.slug}`)
-                                            }}>More Details</button>
+                                                
+                                            }} style={{ borderRadius: '12px' }}>More Details</button>
                                             <button className="btn btn-primary" onClick={() => {
                                                 setCart([...cart, p])
                                                 localStorage.setItem('cart', JSON.stringify([...cart, p]))
                                                 toast.success("product added to cart")
-                                            }}>Add to Cart</button>
+                                            }} style={{ borderRadius: '12px' }}>Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>

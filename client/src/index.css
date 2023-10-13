@@ -153,3 +153,33 @@ font-size: 18px;
     text-decoration: none;
     color: black;
 }
+
+/* Card  */
+.card{
+    border-radius: '12px';
+        overflow: hidden;
+}
+.card .image-container{
+    overflow: hidden;
+}
+.card img{
+    cursor: pointer;
+}
+.card img:hover{
+
+    transform: scale(1.4);
+    transition: 0.5s ease-in-out;
+}
+
+/* ************************* CATEGORY BUTTON *************** */
+.category-btn{
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+}.category-btn:hover{
+    background-color: white;
+    color: black;
+    transition: 0.5s ease-in-out;
+    font-size: 18px;
+    font-weight: 600;
+}

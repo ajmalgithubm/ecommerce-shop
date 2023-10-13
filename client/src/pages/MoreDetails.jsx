@@ -68,17 +68,17 @@ const MoreDetails = () => {
                                         <div className="card-body">
                                             <h5 className="card-title">{p?.name}</h5>
                                             <p className="card-text">{p?.description.substring(0, 30)}</p>
-                                            <p className="card-price">$ {p?.price}</p>
+                                            <p className="card-price" style={{ fontSize: '22px', color: 'green', fontWeight: '600' }}>$ {p?.price}</p>
                                         </div>
                                         <div className="card-footer">
                                             <div className="btn-group">
                                                 <button className="btn btn-success mr-1" onClick={() => {
                                                     navigate(`/more-details/${p.slug}`)
-                                                }}>More Details</button>
+                                                }} style={{ borderRadius: '12px' }}>More Details</button>
                                                 <button className="btn btn-primary" onClick={() => {
                                                     setCart([...cart, p])
                                                     localStorage.setItem('cart', JSON.stringify([...cart, p]))
-                                                }}>Add to Cart</button>
+                                                }} style={{ borderRadius: '12px' }}>Add to Cart</button>
                                             </div>
                                         </div>
                                     </div>

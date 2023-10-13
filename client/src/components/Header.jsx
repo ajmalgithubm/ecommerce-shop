@@ -43,13 +43,15 @@ const Header = () => {
                                 placeholder="Search"
                                 aria-label="Search"
                                 onChange={(e) => setValue({ ...value, keyword: e.target.value })}
+                                style={{border:'1px solid black', color:'black', fontWeight:'300', fontSize:"16px"}}
                             />
                             <button
-                                className="btn btn-outline-success my-2 my-sm-0"
+                                className="btn my-2 my-sm-0"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     navigate(`/search/${value?.keyword}`)
                                 }}
+                                style={{backgroundColor:"black", color:'white'}}
                             >
                                 Search
                             </button>

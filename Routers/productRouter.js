@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAdmin, requireSignIn } from '../Middleware/authMiddleware.js';
-import { braintreePaymentController, braintreeTokenController, createProductController, deleteProductController, filterProductController, getProductByCategoryWise, getProductController, getProductListController, getProductPhotoController, getSingleProductController, getTotalProductController, searchProductController, similarProductController, updateProductController } from '../Controllers/productController.js';
+import { braintreePaymentController, braintreeTokenController, createOrderController, createProductController, createRazoPayOrderController, deleteProductController, filterProductController, getAllOrderController, getOrdersController, getProductByCategoryWise, getProductController, getProductListController, getProductPhotoController, getSingleProductController, getTotalProductController, searchProductController, similarProductController, updateOrderStatusController, updateProductController } from '../Controllers/productController.js';
 import formidable from 'express-formidable';
 
 const router = express.Router();
@@ -60,4 +60,21 @@ router.get('/braintree/token', braintreeTokenController)
 // payments
 router.post('/braintree/payment', requireSignIn, braintreePaymentController)
 
-export default router;
+// razopay payment order
+router.post('/create-razorpay-order', requireSignIn, createRazoPayOrderController)
+
+// create Order
+
+router.post('/create-order', requireSignIn, createOrderController)
+
+// get all order
+
+router.get('/orders', requireSignIn, getAllOrderController)
+
+// all users orders
+router.get('/all-orders', requireSignIn, isAdmin,getOrdersController);
+
+// order status update
+router.put('/update-order/:orderId', requireSignIn, isAdmin, updateOrderStatusController);
+
+export default router; 

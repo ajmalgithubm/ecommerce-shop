@@ -171,27 +171,35 @@ const Home = () => {
             </div>
           </div>
           <div className="col-md-9">
-            <div className='d-flex flex-wrap'>
+            <div className="row">
+              <img src="https://img.freepik.com/free-psd/flat-design-sales-discount-youtube-banner_23-2150751206.jpg" alt="" width={"100%"} style={{borderRadius:'10px'}} />
+            </div>
+            <h2 className='mt-2'>Products</h2>
+            <div className='d-flex flex-wrap mt-3'>
               {!products.length && <h3>No Product Found</h3>}
               {
                 products?.map(p => (
-                  <div className="card" key={p._id}>
-                    <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} width={200} height={200} className="card-img-top" alt="Product Image" />
+                  <div className="card" key={p._id} style={{ borderRadius: '10px' }}>
+                    <div className="image-container">
+                      <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                        width={200} height={200}
+                        className="card-img-top" alt="Product Image" />
+                    </div>
                     <div className="card-body">
                       <h5 className="card-title">{p.name}</h5>
                       <p className="card-text">{p.description.substring(0, 30)}</p>
-                      <p className="card-price">$ {p.price}</p>
+                      <p className="card-price" style={{ fontSize: '22px', color: 'green', fontWeight: '600' }}>$ {p.price}</p>
                     </div>
                     <div className="card-footer">
                       <div className="btn-group">
                         <button className="btn btn-success mr-1" onClick={() => {
                           navigate(`/more-details/${p.slug}`)
-                        }}>More Details</button>
+                        }} style={{ borderRadius: '12px' }}>More Details</button>
                         <button className="btn btn-primary" onClick={() => {
-                          setCart([ ...cart, p])
+                          setCart([...cart, p])
                           localStorage.setItem('cart', JSON.stringify([...cart, p]))
                           toast.success("product added to cart")
-                        }}>Add to Cart</button>
+                        }} style={{ borderRadius: '12px' }}>Add to Cart</button>
                       </div>
                     </div>
                   </div>

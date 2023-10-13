@@ -5,24 +5,20 @@ import categoryModel from "../Models/categoryModel.js";
 import braintree from "braintree";
 import dotenv from 'dotenv';
 import orderModel from "../Models/orderModel.js";
+import Razorpay from 'razorpay'
 dotenv.config()
 
 // payment gateway
-var gateway = new braintree.BraintreeGateway({
-    environment: braintree.Environment.Sandbox,
-    merchantId: process.env.BRAIN_TREE_MERCHANT_ID,
-    publicKey: process.env.BRAIN_TREE_PUBLIC_KEY,
-    privateKey: process.env.BRAIN_TREE_PRIVATE_KEY
-});
+
 
 // payment token
 export const braintreeTokenController = async (req, res) => {
     try {
         gateway.clientToken.generate({}, function (error, response) {
             if (error) {
-                res.status(400).send({error})
+                res.status(400).send({ error })
             } else {
-                res.status(200).send({token: response.clientToken})
+                res.status(200).send({ token: response.clientToken })
             }
         })
     } catch (err) {
@@ -32,11 +28,12 @@ export const braintreeTokenController = async (req, res) => {
 
 // payment
 export const braintreePaymentController = async () => {
+    console.log("Brain tree payment called")
     try {
         const { cart, nonce } = req.body;
         let total = 0;
         cart?.map(i => {
-            total += i.price 
+            total += i.price
         });
         let newTransaction = gateway.transaction.sale({
             amount: total,
@@ -264,7 +261,7 @@ export const filterProductController = async (req, res) => {
 export const getProductListController = async (req, res) => {
     try {
         const page = req.params.page ? req.params.page : 1;
-        const numberPerPage = 4;
+        const numberPerPage = 6;
         const product = await productModel.find({}).select("-photo").skip(numberPerPage * (page - 1)).limit(numberPerPage);
         res.status(200).send({
             success: true,
@@ -313,7 +310,7 @@ export const searchProductController = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Search Product is Recieved",
-            products,
+            products, 
             keyword
         })
 
@@ -363,6 +360,92 @@ export const getProductByCategoryWise = async (req, res) => {
         res.status(400).send({
             success: false,
             message: "Error while getting products by categorywise"
+        })
+    }
+}
+
+const razorpay = new Razorpay({
+    key_id: "rzp_test_XMXO3SrPxms6c8",
+    key_secret: 'l6oZLX1MJ1okRVXDfROVVZFG'
+})
+
+export const createRazoPayOrderController = async (req, res) => {
+    console.log(req.body.amount)
+    try {
+        const amount = req.body.amount
+        const options = {
+            amount: amount * 100, 
+            currency: 'INR',
+            receipt: 'order_rcptid_' + Date.now(),
+        };
+        const order = await razorpay.orders.create(options);
+        res.json(order);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'An error occurred while creating the Razorpay order.' });
+    }
+}
+
+// create order
+export const createOrderController = async(req, res) => {
+    console.log(req.body)
+    try{
+        const {cart, result} = req.body;
+        const order = new orderModel({
+            products: cart,
+            payment: result,
+            buyer: req.user.id
+        }).save()
+        res.json({ok: true})
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
+// getAllOrderController
+
+export const getAllOrderController = async(req, res) =>{
+    try{
+        const order = await orderModel.find({buyer: req.user.id }).populate("products", "-photo").populate("buyer", "name")
+        res.status(200).send({
+            order,
+            success: true
+        }) 
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+} 
+
+// get osrder
+export const getOrdersController = async(req, res) => {
+    try {
+        const orders = await orderModel.find({}).populate("products", "-photo").populate("buyer", "name").sort({ createdAt :-1 })
+        res.status(200).send({
+            success: true,
+            orders
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
+
+export const updateOrderStatusController = async(req, res) => {
+    console.log("update function called ", req.body)
+    try {
+        const { orderId } = req.params;
+        const {status} = req.body;
+        const orders = await orderModel.findByIdAndUpdate(orderId, { status }, {new: true})
+        res.status(200).json({
+            orders
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({
+            success: false,
+            message:"error while Updating Order status",
+            err
         })
     }
 }

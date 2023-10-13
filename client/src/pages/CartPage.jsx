@@ -4,7 +4,6 @@ import { useCart } from '../context/Cart'
 import { useAuth } from '../context/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import DropIn from 'braintree-web-drop-in-react';
 import toast from 'react-hot-toast';
 
 const CartPage = () => {
@@ -55,27 +54,73 @@ const CartPage = () => {
     }
 
     // handle payments
-    const handlePayment = async (e) => {
-        e.preventDefault();
-        setLoading(true)
-        try {
-            const { nonce } = await instance.requestPaymentMethod();
-            const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/braintree/payment`, {cart, nonce})
-            setLoading(false)
-            console.log("pyment = ", data)
-            localStorage.removeItem('cart')
-            setCart({})
-            toast.success("payment completed")
-        } catch (err) {
-            console.log(err)
-        }
+    // helpers.js
+
+    const loadScript = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            script.onload = resolve;
+            document.body.appendChild(script);
+        });
+    };
+
+    const createOrder = async () => {
+        let total = 0;
+        cart?.map((p) => {
+            total += p.price
+        })
+        const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/create-razorpay-order`, {amount: total})
+        return data;
+    };
+
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) resolve();
+            else document.getElementById('razorpay').addEventListener('load', resolve);
+        });
+    };
+
+
+    // payment 
+    const handlePayment =async () => {
+        await loadScript();
+        const order = await createOrder();
+        const options = {
+            key: "rzp_test_XMXO3SrPxms6c8", // Replace with your Razorpay key
+            amount: order.amount,
+            currency: 'INR',
+            name: 'MY Technology',
+            description: 'Payment for your product',
+            order_id: order.id,
+            handler: async function (response) {
+                if (!(response.razorpay_payment_id && response.razorpay_signature)){
+                    console.log("Payment Failed")
+                }
+                let result = (response.razorpay_payment_id && response.razorpay_signature) ? "SUCCESS" : "FAILED";
+                const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/create-order`, {cart, result})
+                if(data?.ok){
+                   toast.success("Payment succfully")
+                }else{
+                    toast.error("payment failed")
+                }
+                setCart([])
+                localStorage.removeItem("cart")
+                navigate('/dashboard/user/orders')
+            },  
+            prefill: {
+                name: 'John Doe',
+                email: 'johndoe@example.com',
+                contact: '1234567890',
+            },
+        };
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
     }
 
     // life cycle hook
-    useEffect(() => {
-        // trigger user token change
-        getToken()
-    }, [auth?.token])
+   
 
 
 
@@ -85,9 +130,7 @@ const CartPage = () => {
                 {
                     auth && auth?.token && (<h5>Welcome {auth?.user?.name}</h5>)
                 }
-                {
-                    (auth && auth?.token && cart?.length > 0) ? (<h5>Go to Checkout</h5>) : !(auth && auth?.token) && (<h5>Go to Login</h5>)
-                }
+               
                 <div className="row  p-3">
                     <div className="col-md-6">
                         <h3 className='text-center'>{cart?.length > 0 ? `You have ${cart?.length} cart items` : "cart is Empty"}</h3>
@@ -112,7 +155,7 @@ const CartPage = () => {
                         }
 
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 mt-3">
                         <h3 className='text-center'>Cart Summery</h3>
                         <h6 className='text-center'>TOTAL | CHECKOUT | PAYMENT</h6>
                         <h4 className='text-center mt-3'>Total : {getTotal()}</h4>
@@ -139,16 +182,13 @@ const CartPage = () => {
                         }
                         <div className="row mt-2" style={{ display: 'flex', justifyContent: "center" }}>
                             {/* payment */}
-                            <DropIn
-                                options={{
-                                    authorization: clientToken,
-                                    paypal: {
-                                        flow: "vault"
-                                    }
-                                }}
-                                onInstance={instance => setInstance(instance)}
-                            />
-                            <button className='btn btn-primary' onClick={handlePayment}>Make Payment</button>
+                            <div id="razorpay">
+
+                            </div>
+                            <button className='btn btn-primary'
+                             onClick={handlePayment}
+                             disabled={!auth || !auth?.user || !cart?.length}
+                             >Make Payment</button>
                         </div>
                     </div>
                 </div>
