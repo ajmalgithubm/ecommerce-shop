@@ -43,7 +43,7 @@ To get the project up and running on your local machine, follow these steps:
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/ecommerce-razorpay.git
-   cd ecommerce-razorpay
+   cd ecommerce-shop
 
 # Install client dependencies
 cd client
